@@ -46,8 +46,14 @@ class APITester:
         self.base_url = os.getenv('API_BASE_URL')
         
         # Get optional configuration with defaults
-        self.timeout = int(os.getenv('API_TIMEOUT', 30))
+        try:
+            self.timeout = int(os.getenv('API_TIMEOUT', 30))
+        except ValueError:
+            print("⚠️  Warning: API_TIMEOUT must be an integer. Using default: 30")
+            self.timeout = 30
+        
         self.verify_ssl = os.getenv('API_VERIFY_SSL', 'true').lower() != 'false'
+        self.verbose = os.getenv('VERBOSE', 'false').lower() == 'true'
         
         # Test results tracking
         self.tests_passed = 0
@@ -110,7 +116,8 @@ class APITester:
             if response.status_code == 200:
                 try:
                     data = response.json()
-                    print(f"  Response: {data}")
+                    if self.verbose:
+                        print(f"  Response: {data}")
                     print("  ✅ PASSED")
                     self.tests_passed += 1
                     self.test_results.append((test_name, "PASSED", None))
@@ -157,6 +164,8 @@ class APITester:
             if response.status_code == 200:
                 try:
                     data = response.json()
+                    if self.verbose:
+                        print(f"  Authenticated user: {data.get('email', 'N/A')}")
                     print(f"  Authenticated successfully")
                     print("  ✅ PASSED")
                     self.tests_passed += 1
@@ -210,8 +219,10 @@ class APITester:
             if response.status_code == 200:
                 try:
                     data = response.json()
-                    # Verify response structure
-                    if 'data' in data or isinstance(data, list):
+                    if self.verbose:
+                        print(f"  Response: {data}")
+                    # Check for expected response format (data field with array)
+                    if 'data' in data:
                         print(f"  Resources retrieved successfully")
                         print("  ✅ PASSED")
                         self.tests_passed += 1

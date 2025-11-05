@@ -263,8 +263,14 @@ load_dotenv()
 # Access configuration
 API_KEY = os.getenv('API_KEY')
 API_BASE_URL = os.getenv('API_BASE_URL')
-API_TIMEOUT = int(os.getenv('API_TIMEOUT', 30))
-API_VERIFY_SSL = os.getenv('API_VERIFY_SSL', 'true').lower() == 'true'
+
+try:
+    API_TIMEOUT = int(os.getenv('API_TIMEOUT', 30))
+except ValueError:
+    print("Warning: API_TIMEOUT must be an integer. Using default: 30")
+    API_TIMEOUT = 30
+
+API_VERIFY_SSL = os.getenv('API_VERIFY_SSL', 'true').lower() != 'false'
 
 # Validate required variables
 if not API_KEY:
