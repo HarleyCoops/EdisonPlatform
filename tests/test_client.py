@@ -31,11 +31,16 @@ class TestJobTypes:
 class TestEdisonPlatformClient:
     """Test EdisonPlatformClient class."""
     
-    def test_init_with_api_key(self):
+    @patch('edison_platform.client.EdisonClient')
+    def test_init_with_api_key(self, mock_edison_client):
         """Test client initialization with API key."""
+        mock_client_instance = Mock()
+        mock_edison_client.return_value = mock_client_instance
+        
         client = EdisonPlatformClient(api_key="test_key")
         assert client.api_key == "test_key"
         assert client.client is not None
+        mock_edison_client.assert_called_once_with(api_key="test_key")
     
     def test_init_without_api_key_raises_error(self):
         """Test that initialization without API key raises ValueError."""
@@ -49,11 +54,16 @@ class TestEdisonPlatformClient:
             if old_key:
                 os.environ["EDISON_API_KEY"] = old_key
     
-    def test_init_with_env_variable(self):
+    @patch('edison_platform.client.EdisonClient')
+    def test_init_with_env_variable(self, mock_edison_client):
         """Test client initialization with environment variable."""
+        mock_client_instance = Mock()
+        mock_edison_client.return_value = mock_client_instance
+        
         with patch.dict(os.environ, {"EDISON_API_KEY": "env_test_key"}):
             client = EdisonPlatformClient()
             assert client.api_key == "env_test_key"
+            mock_edison_client.assert_called_once_with(api_key="env_test_key")
     
     @patch('edison_platform.client.EdisonClient')
     def test_run_task(self, mock_edison_client):
