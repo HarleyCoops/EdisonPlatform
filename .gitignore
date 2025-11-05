@@ -1,3 +1,8 @@
+# Environment files (contain sensitive data)
+.env
+.env.local
+.env.*.local
+
 # Python
 __pycache__/
 *.py[cod]
@@ -19,11 +24,9 @@ wheels/
 *.egg-info/
 .installed.cfg
 *.egg
-
-# Virtual Environment
 venv/
-env/
 ENV/
+env/
 
 # IDE
 .vscode/
@@ -31,10 +34,18 @@ ENV/
 *.swp
 *.swo
 *~
-
-# Environment variables
-.env
-
-# OS
 .DS_Store
-Thumbs.db
+
+# Testing
+.pytest_cache/
+.coverage
+htmlcov/
+*.cover
+
+# Logs
+*.log
+
+# Secrets and keys
+*.key
+*.pem
+secrets/
