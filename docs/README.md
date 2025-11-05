@@ -4,6 +4,7 @@ Welcome to the Edison Platform documentation. This directory contains comprehens
 
 ## Documentation Structure
 
+- [Quick Reference](./quick-reference.md) - Essential commands and quick tips
 - [Getting Started](./getting-started.md) - Quick start guide for new users
 - [API Documentation](./api-documentation.md) - Complete API reference and usage guide
 - [API Testing Guide](./api-testing.md) - Instructions for running API tests

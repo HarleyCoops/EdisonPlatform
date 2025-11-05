@@ -6,6 +6,7 @@ Welcome to the Edison Platform - a comprehensive platform solution with robust A
 
 Complete documentation is available in the `/docs` directory:
 
+- **[Quick Reference Guide](./docs/quick-reference.md)** - Essential commands and quick tips
 - **[Getting Started Guide](./docs/getting-started.md)** - Quick start for new users
 - **[API Documentation](./docs/api-documentation.md)** - Complete API reference
 - **[API Testing Guide](./docs/api-testing.md)** - How to run API tests
@@ -82,6 +83,14 @@ The platform uses environment variables for configuration. Key variables:
 See the [Configuration Guide](./docs/configuration.md) for complete details.
 
 ## 📖 Documentation Overview
+
+### [Quick Reference](./docs/quick-reference.md)
+Quick access to essential commands and configuration:
+- Common commands for setup and testing
+- Environment variables table
+- Troubleshooting commands
+- Project structure overview
+- Status codes reference
 
 ### [Getting Started](./docs/getting-started.md)
 Step-by-step guide to set up and run the platform, including:
