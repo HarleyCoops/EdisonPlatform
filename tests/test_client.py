@@ -167,8 +167,26 @@ class TestEdisonPlatformClient:
         assert result == {"analysis": "complete"}
         call_args = mock_client_instance.run_tasks_until_done.call_args[0][0]
         assert call_args["name"] == JobNames.ANALYSIS
-        assert call_args["dataset"] == "dataset_1"
-        assert call_args["analysis_type"] == "differential"
+        assert "Dataset: dataset_1" in call_args["query"]
+        assert "analysis_type: differential" in call_args["query"]
+    
+    @patch('edison_platform.client.EdisonClient')
+    def test_analyze_data_custom_query_and_overrides(self, mock_edison_client):
+        """Ensure custom query text and overrides pass through untouched."""
+        mock_client_instance = Mock()
+        mock_client_instance.run_tasks_until_done.return_value = {"analysis": "ok"}
+        mock_edison_client.return_value = mock_client_instance
+        
+        client = EdisonPlatformClient(api_key="test_key")
+        result = client.analyze_data(
+            query="custom analysis plan",
+            task_overrides={"metadata": {"priority": "high"}}
+        )
+        
+        assert result == {"analysis": "ok"}
+        call_args = mock_client_instance.run_tasks_until_done.call_args[0][0]
+        assert call_args["query"] == "custom analysis plan"
+        assert call_args["metadata"] == {"priority": "high"}
     
     @patch('edison_platform.client.EdisonClient')
     def test_chemistry_task_convenience_method(self, mock_edison_client):

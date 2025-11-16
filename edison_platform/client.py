@@ -9,6 +9,7 @@ import os
 import logging
 import sys
 import time
+import json
 from typing import Dict, Any, Optional, Callable
 from edison_client import EdisonClient, JobNames
 
@@ -343,13 +344,15 @@ class EdisonPlatformClient:
         }
         return self.run_task(task_data)
     
-    def analyze_data(self, dataset: str, **kwargs) -> Any:
+    def analyze_data(self, dataset: Optional[str] = None, **kwargs) -> Any:
         """
         Convenience method for data analysis tasks.
         
         Args:
-            dataset (str): The dataset identifier to analyze.
-            **kwargs: Additional parameters specific to the analysis.
+            dataset (str, optional): Identifier for the dataset to analyze.
+            **kwargs: Additional context for the analysis. Use ``query`` to
+                supply a fully-formed prompt or ``task_overrides`` to pass extra
+                TaskRequest fields (e.g., ``metadata``).
         
         Returns:
             Task response with analysis results.
@@ -358,19 +361,47 @@ class EdisonPlatformClient:
             >>> client = EdisonPlatformClient(api_key="your_key")
             >>> result = client.analyze_data("my_dataset", analysis_type="differential")
         """
+        params_for_prompt = dict(kwargs)
+        custom_query = params_for_prompt.pop("query", None)
+        task_overrides = params_for_prompt.pop("task_overrides", None) or {}
+        
         if self.verbose:
             self._log_status("=" * 60, "info")
             self._log_status("DATA ANALYSIS", "info")
             self._log_status("=" * 60, "info")
             self._log_status(f"Analyzing dataset: {dataset}", "info")
-            if kwargs:
-                self._log_status(f"Parameters: {kwargs}", "info")
+            if params_for_prompt:
+                self._log_status(f"Parameters: {params_for_prompt}", "info")
+        
+        if custom_query:
+            query = custom_query
+        else:
+            parts = []
+            if dataset:
+                parts.append(f"Dataset: {dataset}")
+            if params_for_prompt:
+                parts.append("Parameters:")
+                for key, value in params_for_prompt.items():
+                    if isinstance(value, (dict, list)):
+                        value_str = json.dumps(value, indent=2, sort_keys=True)
+                    else:
+                        value_str = str(value)
+                    parts.append(f"- {key}: {value_str}")
+            query = "\n".join(parts).strip()
+        
+        if not query:
+            raise ValueError(
+                "Analysis requests require at least a dataset or a query string."
+            )
         
         task_data = {
             "name": JobNames.ANALYSIS,
-            "dataset": dataset,
-            **kwargs
+            "query": query
         }
+        
+        if task_overrides:
+            task_data.update(task_overrides)
+        
         return self.run_task(task_data)
     
     def chemistry_task(self, query: str, **kwargs) -> Any:

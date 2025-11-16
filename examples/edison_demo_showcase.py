@@ -34,7 +34,7 @@ HIGHLIGHTS: List[str] = [
     ),
     (
         "Seven discoveries already span metabolomics, materials science, "
-        "statistical genetics, and neurodegeneration — each fully traceable "
+        "statistical genetics, and neurodegeneration - each fully traceable "
         "through the Edison Platform."
     ),
 ]
@@ -63,10 +63,10 @@ SCENES: List[Scene] = [
     },
     {
         "id": "perovskite-humidity",
-        "title": "Stress‑test perovskite fabrication assumptions",
+        "title": "Stress-test perovskite fabrication assumptions",
         "insight": (
             "In materials science, Kosmos rediscovered that absolute humidity "
-            "during thermal annealing — especially the ~60 g/m³ fatal filter — "
+            "during thermal annealing - especially the ~60 g/m^3 fatal filter - "
             "governs perovskite solar cell efficiency."
         ),
         "method": "precedent_search",
@@ -164,10 +164,10 @@ def iter_scenes(selected_ids: Iterable[str] | None) -> Iterable[Scene]:
 
 
 def print_header() -> None:
-    print("\nEdison Platform × Kosmos Showcase")
+    print("\nEdison Platform x Kosmos Showcase")
     print("=" * 80)
     for bullet in HIGHLIGHTS:
-        print(f"• {textwrap.fill(bullet, width=78, subsequent_indent='  ')}")
+        print(f"- {textwrap.fill(bullet, width=78, subsequent_indent='  ')}")
     print("=" * 80)
 
 
@@ -184,7 +184,7 @@ def run_scene(scene: Scene, client: EdisonPlatformClient | None, dry_run: bool) 
         return
 
     method = getattr(client, scene["method"])
-    print("\nRunning on Edison…")
+    print("\nRunning on Edison...")
     response = method(**scene["kwargs"])
     print("\nResponse:")
     print(format_json(response))
