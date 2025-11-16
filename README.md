@@ -1,16 +1,40 @@
 # Edison Platform
 
-Welcome to the Edison Platform - a comprehensive platform solution with robust API capabilities.
+**AI-Accelerated Scientific Discovery**
 
-## Documentation
+The Edison Platform provides programmatic access to [Kosmos](https://edisonscientific.com/articles/announcing-kosmos), a next-generation AI Scientist that performs autonomous scientific discovery. Kosmos can accomplish in a single day what would take a PhD or postdoctoral scientist approximately 6 months, reading 1,500 papers and executing 42,000 lines of analysis code in a single run.
 
-Complete documentation is available in the `/docs` directory:
+## What is Kosmos?
 
-- **[Quick Reference Guide](./docs/quick-reference.md)** - Essential commands and quick tips
-- **[Getting Started Guide](./docs/getting-started.md)** - Quick start for new users
-- **[API Documentation](./docs/api-documentation.md)** - Complete API reference
-- **[API Testing Guide](./docs/api-testing.md)** - How to run API tests
-- **[Configuration Guide](./docs/configuration.md)** - Environment setup and configuration
+Kosmos is an AI Scientist designed for autonomous discovery. Unlike previous AI systems limited by finite context windows, Kosmos uses structured world models to efficiently incorporate information from hundreds of agent trajectories and maintain coherence over tens of millions of tokens toward specific research objectives.
+
+### Revolutionary Capabilities
+
+- **Scale**: A single Kosmos run reads 1,500 scientific papers and executes 42,000 lines of analysis code
+- **Speed**: Beta users estimate Kosmos accomplishes in one day what would take them 6 months
+- **Accuracy**: 79.4% of Kosmos conclusions are accurate, validated through replication studies
+- **Transparency**: Every conclusion can be traced to specific lines of code or passages in scientific literature
+- **Range**: Successfully applied across neuroscience, materials science, statistical genetics, and more
+
+### Real Discoveries
+
+Kosmos has already made seven validated discoveries, including:
+
+- **Reproduced unpublished findings** in metabolomics, identifying nucleotide metabolism as the dominant altered pathway in hypothermic mice brains
+- **Novel molecular mechanisms** linking genetic variants to Type 2 diabetes risk reduction
+- **Clinically relevant insights** into neuronal vulnerability in aging, identifying reduced flippase expression in entorhinal cortex neurons that may trigger microglia-mediated neurodegeneration in Alzheimer's disease
+
+Read more about Kosmos and its discoveries in the [announcement article](https://edisonscientific.com/articles/announcing-kosmos).
+
+## What Can You Do?
+
+The Edison Platform enables you to:
+
+- **Literature Search**: Query vast scientific literature with citations and traceability
+- **Data Analysis**: Perform sophisticated analyses on biological datasets
+- **Precedent Search**: Discover prior scientific work and methodologies
+- **Chemistry Tasks**: Design molecules, predict properties, and perform cheminformatics analyses
+- **Autonomous Discovery**: Run Kosmos on your research objectives to accelerate discovery
 
 ## Quick Start
 
@@ -18,6 +42,7 @@ Complete documentation is available in the `/docs` directory:
 
 - Python 3.8 or higher
 - pip (Python package manager)
+- Edison API key ([get one here](https://www.edisonscientific.com/))
 
 ### Installation
 
@@ -32,142 +57,6 @@ cd EdisonPlatform
 pip install -r requirements.txt
 ```
 
-
-Testing configuration...
-API_KEY is set
-API_BASE_URL is set
-
-Running API tests...
-
-Test 1: Health Check
-  PASSED
-
-Test 2: Authentication Test
-  PASSED
-
-Test 3: List Resources
-  PASSED
-
-Test Results: 3/3 passed
-All tests passed successfully!
-```
-
-## Configuration
-
-The platform uses environment variables for configuration. Key variables:
-
-- `API_KEY` - Your API authentication key (required)
-- `API_BASE_URL` - Base URL for API requests (required)
-- `API_TIMEOUT` - Request timeout in seconds (optional, default: 30)
-- `API_VERIFY_SSL` - Verify SSL certificates (optional, default: true)
-
-See the [Configuration Guide](./docs/configuration.md) for complete details.
-
-## Documentation Overview
-
-### [Quick Reference](./docs/quick-reference.md)
-Quick access to essential commands and configuration:
-- Common commands for setup and testing
-- Environment variables table
-- Troubleshooting commands
-- Project structure overview
-- Status codes reference
-
-### [Getting Started](./docs/getting-started.md)
-Step-by-step guide to set up and run the platform, including:
-- Installation instructions
-- Environment configuration
-- Basic usage examples
-- Troubleshooting common issues
-
-### [API Documentation](./docs/api-documentation.md)
-Complete API reference including:
-- Authentication methods
-- Available endpoints
-- Request/response examples
-- Error handling
-- Rate limiting information
-- Best practices
-
-### [API Testing Guide](./docs/api-testing.md)
-Comprehensive testing documentation covering:
-- Running the test suite
-- Test case descriptions
-- Custom test creation
-- CI/CD integration
-- Performance testing
-- Troubleshooting test failures
-
-### [Configuration Guide](./docs/configuration.md)
-Detailed configuration information including:
-- Environment variables reference
-- Security best practices
-- Environment-specific configurations
-- Configuration validation
-- Secret management
-
-## Testing
-
-The platform includes a comprehensive API test suite that validates:
-
-1. **Health Check** - Verifies API connectivity
-2. **Authentication** - Validates API key configuration
-3. **Resources API** - Tests resource listing functionality
-
-Run tests with:
-```bash
-python tests/api_test.py
-```
-
-## Security
-
-- Never commit `.env` files to version control
-- Rotate API keys regularly
-- Use environment-specific configurations
-- Enable SSL verification in production
-- Follow the security guidelines in the [Configuration Guide](./docs/configuration.md)
-
-## Project Structure
-
-```
-EdisonPlatform/
-├── docs/                      # Documentation
-│   ├── README.md             # Documentation index
-│   ├── getting-started.md    # Getting started guide
-│   ├── api-documentation.md  # API reference
-│   ├── api-testing.md        # Testing guide
-│   └── configuration.md      # Configuration reference
-├── tests/                     # Test suite
-│   └── api_test.py           # API test script
-├── .env.example              # Environment template
-├── .gitignore                # Git ignore rules
-├── requirements.txt          # Python dependencies
-└── README.md                 # This file
-```
-
-## Contributing
-
-Contributions are welcome! Please:
-1. Fork the repository
-2. Create a feature branch
-3. Make your changes
-4. Add/update tests as needed
-5. Update documentation
-6. Submit a pull request
-
-## License
-
-See LICENSE file for details.
-
-## Support
-
-- Check the [documentation](./docs/) for detailed information
-- Review [troubleshooting guides](./docs/getting-started.md#troubleshooting) for common issues
-- Open an issue for bugs or feature requests
-
----
-
-For more information, see the [documentation](./docs/README.md).
 3. Set up your API key:
    - Copy `.env.example` to `.env`
    - Add your Edison API key to the `.env` file:
@@ -176,13 +65,10 @@ For more information, see the [documentation](./docs/README.md).
      ```
    - Get your API key from your [Edison profile page](https://www.edisonscientific.com/)
 
-## Quick Start
-
 ### Basic Usage
 
 ```python
 from edison_platform import EdisonPlatformClient
-from edison_client import JobNames
 
 # Initialize the client (reads API key from environment)
 client = EdisonPlatformClient()
@@ -255,6 +141,16 @@ Edison Scientific supports four main job types:
 | **PRECEDENT** | Query prior scientific work | "Has anyone used CRISPR for sickle cell anemia?" |
 | **MOLECULES** | Chemistry tasks using cheminformatics tools | Drug design, molecular property prediction |
 
+## Transparency and Traceability
+
+Every conclusion generated by Kosmos can be traced back to its source:
+
+- **Code Provenance**: See exactly which lines of analysis code produced each result
+- **Literature Citations**: Trace insights to specific passages in scientific papers
+- **Full Audit Trail**: Complete transparency for scientific reproducibility
+
+This ensures that Kosmos reports are fully auditable and meet the standards required for scientific publication.
+
 ## API Reference
 
 ### EdisonPlatformClient
@@ -315,23 +211,32 @@ The `examples/` directory contains several demonstration scripts:
    python examples/all_job_types.py
    ```
 
-## Project Structure
+4. **`edison_demo_showcase.py`**: Kosmos-inspired narrative demo (see [`docs/demo-showcase.md`](./docs/demo-showcase.md))
+   ```bash
+   python examples/edison_demo_showcase.py --dry-run
+   ```
 
-```
-EdisonPlatform/
-├── edison_platform/          # Main package
-│   ├── __init__.py          # Package initialization
-│   ├── client.py            # Main client implementation
-│   └── job_types.py         # Job type definitions
-├── examples/                 # Example scripts
-│   ├── basic_literature_search.py
-│   ├── advanced_async_tasks.py
-│   └── all_job_types.py
-├── requirements.txt          # Python dependencies
-├── .env.example             # Example environment configuration
-├── .gitignore               # Git ignore rules
-└── README.md                # This file
-```
+## Documentation
+
+Complete documentation is available in the `/docs` directory:
+
+- **[Quick Reference Guide](./docs/quick-reference.md)** - Essential commands and quick tips
+- **[Getting Started Guide](./docs/getting-started.md)** - Quick start for new users
+- **[API Documentation](./docs/api-documentation.md)** - Complete API reference
+- **[API Testing Guide](./docs/api-testing.md)** - How to run API tests
+- **[Configuration Guide](./docs/configuration.md)** - Environment setup and configuration
+- **[Demo Showcase Guide](./docs/demo-showcase.md)** - How to present the Kosmos walkthrough
+
+## Configuration
+
+The platform uses environment variables for configuration. Key variables:
+
+- `EDISON_API_KEY` - Your API authentication key (required)
+- `API_BASE_URL` - Base URL for API requests (optional, defaults to production)
+- `API_TIMEOUT` - Request timeout in seconds (optional, default: 30)
+- `API_VERIFY_SSL` - Verify SSL certificates (optional, default: true)
+
+See the [Configuration Guide](./docs/configuration.md) for complete details.
 
 ## Requirements
 
@@ -374,17 +279,53 @@ except Exception as e:
     print(f"Error running task: {e}")
 ```
 
+## Testing
+
+The platform includes a comprehensive API test suite that validates:
+
+1. **Health Check** - Verifies API connectivity
+2. **Authentication** - Validates API key configuration
+3. **Resources API** - Tests resource listing functionality
+
+Run tests with:
+```bash
+python tests/api_test.py
+```
+
+## Project Structure
+
+```
+EdisonPlatform/
+├── edison_platform/          # Main package
+│   ├── __init__.py          # Package initialization
+│   ├── client.py            # Main client implementation
+│   └── job_types.py         # Job type definitions
+├── examples/                 # Example scripts
+│   ├── basic_literature_search.py
+│   ├── advanced_async_tasks.py
+│   └── all_job_types.py
+├── docs/                     # Documentation
+│   ├── quick-reference.md
+│   ├── getting-started.md
+│   ├── api-documentation.md
+│   ├── api-testing.md
+│   └── configuration.md
+├── tests/                    # Test suite
+│   └── api_test.py
+├── requirements.txt          # Python dependencies
+├── .env.example             # Example environment configuration
+├── .gitignore               # Git ignore rules
+└── README.md                # This file
+```
+
 ## Contributing
 
 Contributions are welcome! Please feel free to submit a Pull Request.
 
-## License
-
-This project is provided as-is for integration with the Edison Scientific platform.
-
 ## Resources
 
 - [Edison Scientific Website](https://www.edisonscientific.com/)
+- [Kosmos Announcement](https://edisonscientific.com/articles/announcing-kosmos) - Learn about Kosmos and its discoveries
 - [Edison Client Documentation](https://github.com/Future-House/edison-client-docs)
 - [Edison API on Postman](https://www.postman.com/Editox)
 
@@ -393,4 +334,8 @@ This project is provided as-is for integration with the Edison Scientific platfo
 For issues related to:
 - **This integration library**: Open an issue on this repository
 - **Edison platform API**: Refer to the [official Edison documentation](https://github.com/Future-House/edison-client-docs)
-- **API access**: Contact Edison Scientific support
+- **API access**: Contact Edison Scientific support at support@edisonscientific.com
+
+## License
+
+This project is provided as-is for integration with the Edison Scientific platform.
