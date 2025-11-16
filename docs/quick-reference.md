@@ -51,27 +51,27 @@ VERBOSE=true python tests/api_test.py
 
 ### Expected Output
 ```
-🔍 Edison Platform API Test Suite
+Edison Platform API Test Suite
 =====================================
 
 Testing configuration...
-✅ API_KEY is set
-✅ API_BASE_URL is set
+API_KEY is set
+API_BASE_URL is set
 
-🧪 Running API tests...
+Running API tests...
 
 Test 1: Health Check
-  ✅ PASSED
+  PASSED
 
 Test 2: Authentication Test
-  ✅ PASSED
+  PASSED
 
 Test 3: List Resources
-  ✅ PASSED
+  PASSED
 
 =====================================
 Test Results: 3/3 passed
-✅ All tests passed successfully!
+All tests passed successfully!
 ```
 
 ## Troubleshooting

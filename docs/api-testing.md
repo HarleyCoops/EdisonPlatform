@@ -42,33 +42,33 @@ python tests/api_test.py
 When tests run successfully, you should see:
 
 ```
-🔍 Edison Platform API Test Suite
+Edison Platform API Test Suite
 =====================================
 
 Testing configuration...
-✅ API_KEY is set
-✅ API_BASE_URL is set
+API_KEY is set
+API_BASE_URL is set
 
 Running API tests...
 
 Test 1: Health Check
   Endpoint: GET /health
   Status: 200 OK
-  ✅ PASSED
+  PASSED
 
 Test 2: Authentication Test
   Endpoint: GET /user
   Status: 200 OK
-  ✅ PASSED
+  PASSED
 
 Test 3: List Resources
   Endpoint: GET /resources
   Status: 200 OK
-  ✅ PASSED
+  PASSED
 
 =====================================
 Test Results: 3/3 passed
-✅ All tests passed successfully!
+All tests passed successfully!
 ```
 
 ## Test Cases
@@ -203,7 +203,7 @@ def test_custom_endpoint():
     data = response.json()
     assert 'result' in data, "Response missing 'result' field"
     
-    print("✅ Custom endpoint test passed")
+    print("Custom endpoint test passed")
 
 if __name__ == '__main__':
     test_custom_endpoint()

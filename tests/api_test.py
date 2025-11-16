@@ -28,7 +28,7 @@ from dotenv import load_dotenv
 try:
     import requests
 except ImportError:
-    print("❌ Error: 'requests' library not found")
+    print("Error: 'requests' library not found")
     print("Install it with: pip install requests")
     sys.exit(1)
 
@@ -49,7 +49,7 @@ class APITester:
         try:
             self.timeout = int(os.getenv('API_TIMEOUT', 30))
         except ValueError:
-            print("⚠️  Warning: API_TIMEOUT must be an integer. Using default: 30")
+            print("Warning: API_TIMEOUT must be an integer. Using default: 30")
             self.timeout = 30
         
         self.verify_ssl = os.getenv('API_VERIFY_SSL', 'true').lower() != 'false'
@@ -62,26 +62,26 @@ class APITester:
     
     def validate_config(self):
         """Validate that required configuration is present"""
-        print("\n🔍 Edison Platform API Test Suite")
+        print("\nEdison Platform API Test Suite")
         print("=" * 37)
         print("\nTesting configuration...")
         
         config_valid = True
         
         if not self.api_key:
-            print("❌ API_KEY is not set in .env file")
+            print("API_KEY is not set in .env file")
             config_valid = False
         else:
-            print("✅ API_KEY is set")
+            print("API_KEY is set")
         
         if not self.base_url:
-            print("❌ API_BASE_URL is not set in .env file")
+            print("API_BASE_URL is not set in .env file")
             config_valid = False
         else:
-            print("✅ API_BASE_URL is set")
+            print("API_BASE_URL is set")
         
         if not config_valid:
-            print("\n⚠️  Please configure your .env file with required variables")
+            print("\nPlease configure your .env file with required variables")
             print("See .env.example for a template")
             return False
         
@@ -118,26 +118,26 @@ class APITester:
                     data = response.json()
                     if self.verbose:
                         print(f"  Response: {data}")
-                    print("  ✅ PASSED")
+                    print("  PASSED")
                     self.tests_passed += 1
                     self.test_results.append((test_name, "PASSED", None))
                     return True
                 except ValueError:
-                    print("  ⚠️  Response is not valid JSON")
-                    print("  ✅ PASSED (with warning)")
+                    print("  Response is not valid JSON")
+                    print("  PASSED (with warning)")
                     self.tests_passed += 1
                     self.test_results.append((test_name, "PASSED", "Response not JSON"))
                     return True
             else:
                 error_msg = f"Expected 200, got {response.status_code}"
-                print(f"  ❌ FAILED: {error_msg}")
+                print(f"  FAILED: {error_msg}")
                 self.tests_failed += 1
                 self.test_results.append((test_name, "FAILED", error_msg))
                 return False
                 
         except requests.exceptions.RequestException as e:
             error_msg = f"Request failed: {str(e)}"
-            print(f"  ❌ FAILED: {error_msg}")
+            print(f"  FAILED: {error_msg}")
             self.tests_failed += 1
             self.test_results.append((test_name, "FAILED", error_msg))
             return False
@@ -167,32 +167,32 @@ class APITester:
                     if self.verbose:
                         print(f"  Authenticated user: {data.get('email', 'N/A')}")
                     print(f"  Authenticated successfully")
-                    print("  ✅ PASSED")
+                    print("  PASSED")
                     self.tests_passed += 1
                     self.test_results.append((test_name, "PASSED", None))
                     return True
                 except ValueError:
                     error_msg = "Response is not valid JSON"
-                    print(f"  ❌ FAILED: {error_msg}")
+                    print(f"  FAILED: {error_msg}")
                     self.tests_failed += 1
                     self.test_results.append((test_name, "FAILED", error_msg))
                     return False
             elif response.status_code == 401:
                 error_msg = "Authentication failed - check your API_KEY"
-                print(f"  ❌ FAILED: {error_msg}")
+                print(f"  FAILED: {error_msg}")
                 self.tests_failed += 1
                 self.test_results.append((test_name, "FAILED", error_msg))
                 return False
             else:
                 error_msg = f"Unexpected status code: {response.status_code}"
-                print(f"  ❌ FAILED: {error_msg}")
+                print(f"  FAILED: {error_msg}")
                 self.tests_failed += 1
                 self.test_results.append((test_name, "FAILED", error_msg))
                 return False
                 
         except requests.exceptions.RequestException as e:
             error_msg = f"Request failed: {str(e)}"
-            print(f"  ❌ FAILED: {error_msg}")
+            print(f"  FAILED: {error_msg}")
             self.tests_failed += 1
             self.test_results.append((test_name, "FAILED", error_msg))
             return False
@@ -224,39 +224,39 @@ class APITester:
                     # Check for expected response format (data field with array)
                     if 'data' in data:
                         print(f"  Resources retrieved successfully")
-                        print("  ✅ PASSED")
+                        print("  PASSED")
                         self.tests_passed += 1
                         self.test_results.append((test_name, "PASSED", None))
                         return True
                     else:
                         error_msg = "Response missing expected 'data' field"
-                        print(f"  ⚠️  {error_msg}")
-                        print("  ✅ PASSED (with warning)")
+                        print(f"  {error_msg}")
+                        print("  PASSED (with warning)")
                         self.tests_passed += 1
                         self.test_results.append((test_name, "PASSED", error_msg))
                         return True
                 except ValueError:
                     error_msg = "Response is not valid JSON"
-                    print(f"  ❌ FAILED: {error_msg}")
+                    print(f"  FAILED: {error_msg}")
                     self.tests_failed += 1
                     self.test_results.append((test_name, "FAILED", error_msg))
                     return False
             elif response.status_code == 401:
                 error_msg = "Authentication failed - check your API_KEY"
-                print(f"  ❌ FAILED: {error_msg}")
+                print(f"  FAILED: {error_msg}")
                 self.tests_failed += 1
                 self.test_results.append((test_name, "FAILED", error_msg))
                 return False
             else:
                 error_msg = f"Unexpected status code: {response.status_code}"
-                print(f"  ❌ FAILED: {error_msg}")
+                print(f"  FAILED: {error_msg}")
                 self.tests_failed += 1
                 self.test_results.append((test_name, "FAILED", error_msg))
                 return False
                 
         except requests.exceptions.RequestException as e:
             error_msg = f"Request failed: {str(e)}"
-            print(f"  ❌ FAILED: {error_msg}")
+            print(f"  FAILED: {error_msg}")
             self.tests_failed += 1
             self.test_results.append((test_name, "FAILED", error_msg))
             return False
@@ -266,7 +266,7 @@ class APITester:
         if not self.validate_config():
             return False
         
-        print("\n🧪 Running API tests...\n")
+        print("\nRunning API tests...\n")
         
         # Run all tests
         self.test_health_check()
@@ -285,9 +285,9 @@ class APITester:
         print(f"Test Results: {self.tests_passed}/{total_tests} passed")
         
         if self.tests_failed == 0:
-            print("✅ All tests passed successfully!")
+            print("All tests passed successfully!")
         else:
-            print(f"❌ {self.tests_failed} test(s) failed")
+            print(f"{self.tests_failed} test(s) failed")
             print("\nFailed tests:")
             for name, status, error in self.test_results:
                 if status == "FAILED":

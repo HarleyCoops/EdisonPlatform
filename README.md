@@ -2,7 +2,7 @@
 
 Welcome to the Edison Platform - a comprehensive platform solution with robust API capabilities.
 
-## 📚 Documentation
+## Documentation
 
 Complete documentation is available in the `/docs` directory:
 
@@ -12,7 +12,7 @@ Complete documentation is available in the `/docs` directory:
 - **[API Testing Guide](./docs/api-testing.md)** - How to run API tests
 - **[Configuration Guide](./docs/configuration.md)** - Environment setup and configuration
 
-## 🚀 Quick Start
+## Quick Start
 
 ### Prerequisites
 
@@ -34,25 +34,25 @@ pip install -r requirements.txt
 
 
 Testing configuration...
-✅ API_KEY is set
-✅ API_BASE_URL is set
+API_KEY is set
+API_BASE_URL is set
 
-🧪 Running API tests...
+Running API tests...
 
 Test 1: Health Check
-  ✅ PASSED
+  PASSED
 
 Test 2: Authentication Test
-  ✅ PASSED
+  PASSED
 
 Test 3: List Resources
-  ✅ PASSED
+  PASSED
 
 Test Results: 3/3 passed
-✅ All tests passed successfully!
+All tests passed successfully!
 ```
 
-## 🔑 Configuration
+## Configuration
 
 The platform uses environment variables for configuration. Key variables:
 
@@ -63,7 +63,7 @@ The platform uses environment variables for configuration. Key variables:
 
 See the [Configuration Guide](./docs/configuration.md) for complete details.
 
-## 📖 Documentation Overview
+## Documentation Overview
 
 ### [Quick Reference](./docs/quick-reference.md)
 Quick access to essential commands and configuration:
@@ -106,7 +106,7 @@ Detailed configuration information including:
 - Configuration validation
 - Secret management
 
-## 🧪 Testing
+## Testing
 
 The platform includes a comprehensive API test suite that validates:
 
@@ -119,7 +119,7 @@ Run tests with:
 python tests/api_test.py
 ```
 
-## 🔒 Security
+## Security
 
 - Never commit `.env` files to version control
 - Rotate API keys regularly
@@ -127,7 +127,7 @@ python tests/api_test.py
 - Enable SSL verification in production
 - Follow the security guidelines in the [Configuration Guide](./docs/configuration.md)
 
-## 📝 Project Structure
+## Project Structure
 
 ```
 EdisonPlatform/
@@ -145,7 +145,7 @@ EdisonPlatform/
 └── README.md                 # This file
 ```
 
-## 🤝 Contributing
+## Contributing
 
 Contributions are welcome! Please:
 1. Fork the repository
@@ -155,11 +155,11 @@ Contributions are welcome! Please:
 5. Update documentation
 6. Submit a pull request
 
-## 📄 License
+## License
 
 See LICENSE file for details.
 
-## 🆘 Support
+## Support
 
 - Check the [documentation](./docs/) for detailed information
 - Review [troubleshooting guides](./docs/getting-started.md#troubleshooting) for common issues
