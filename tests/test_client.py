@@ -204,8 +204,25 @@ class TestEdisonPlatformClient:
         assert result == {"molecule": "designed"}
         call_args = mock_client_instance.run_tasks_until_done.call_args[0][0]
         assert call_args["name"] == JobNames.MOLECULES
-        assert call_args["query"] == "design molecule"
-        assert call_args["target"] == "protein_x"
+        assert "design molecule" in call_args["query"]
+        assert "target: protein_x" in call_args["query"]
+    
+    @patch('edison_platform.client.EdisonClient')
+    def test_chemistry_task_with_overrides(self, mock_edison_client):
+        """Chemistry task should support passing task_overrides."""
+        mock_client_instance = Mock()
+        mock_client_instance.run_tasks_until_done.return_value = {"molecule": "ok"}
+        mock_edison_client.return_value = mock_client_instance
+        
+        client = EdisonPlatformClient(api_key="test_key")
+        result = client.chemistry_task(
+            "design molecule",
+            task_overrides={"metadata": {"priority": "rush"}}
+        )
+        
+        assert result == {"molecule": "ok"}
+        call_args = mock_client_instance.run_tasks_until_done.call_args[0][0]
+        assert call_args["metadata"] == {"priority": "rush"}
 
 
 if __name__ == "__main__":

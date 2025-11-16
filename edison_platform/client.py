@@ -410,7 +410,8 @@ class EdisonPlatformClient:
         
         Args:
             query (str): The chemistry-related query or task.
-            **kwargs: Additional parameters specific to the chemistry task.
+            **kwargs: Additional context for the chemistry task. Use ``task_overrides``
+                to inject raw TaskRequest fields (e.g., ``metadata``).
         
         Returns:
             Task response with chemistry task results.
@@ -419,15 +420,32 @@ class EdisonPlatformClient:
             >>> client = EdisonPlatformClient(api_key="your_key")
             >>> result = client.chemistry_task("Design a drug for target protein X")
         """
+        params_for_prompt = dict(kwargs)
+        task_overrides = params_for_prompt.pop("task_overrides", None) or {}
+        
         if self.verbose:
             self._log_status("=" * 60, "info")
             self._log_status("CHEMISTRY TASK", "info")
             self._log_status("=" * 60, "info")
             self._log_status(f"Task: {query}", "info")
+            if params_for_prompt:
+                self._log_status(f"Parameters: {params_for_prompt}", "info")
+        
+        prompt = query.strip()
+        if params_for_prompt:
+            extra_lines = ["Parameters:"]
+            for key, value in params_for_prompt.items():
+                if isinstance(value, (dict, list)):
+                    value_str = json.dumps(value, indent=2, sort_keys=True)
+                else:
+                    value_str = str(value)
+                extra_lines.append(f"- {key}: {value_str}")
+            prompt = f"{prompt}\n\n" + "\n".join(extra_lines)
         
         task_data = {
             "name": JobNames.MOLECULES,
-            "query": query,
-            **kwargs
+            "query": prompt
         }
+        if task_overrides:
+            task_data.update(task_overrides)
         return self.run_task(task_data)
