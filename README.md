@@ -2,6 +2,11 @@
 
 **AI-Accelerated Scientific Discovery**
 
+<div align="center">
+  <img src="Terminal.jpg" alt="Edison Platform Terminal Output - Kosmos AI Scientist in action" width="900"/>
+  <p><em>Live terminal output showing Kosmos processing a literature search query with real-time progress logging</em></p>
+</div>
+
 The Edison Platform provides programmatic access to [Kosmos](https://edisonscientific.com/articles/announcing-kosmos), a next-generation AI Scientist that performs autonomous scientific discovery. Kosmos can accomplish in a single day what would take a PhD or postdoctoral scientist approximately 6 months, reading 1,500 papers and executing 42,000 lines of analysis code in a single run.
 
 ## What is Kosmos?

@@ -7,8 +7,28 @@ for interacting with the Edison Scientific platform.
 
 import os
 import logging
-from typing import Dict, Any, Optional
+import sys
+import time
+from typing import Dict, Any, Optional, Callable
 from edison_client import EdisonClient, JobNames
+
+try:
+    from tqdm import tqdm
+    TQDM_AVAILABLE = True
+except ImportError:
+    TQDM_AVAILABLE = False
+
+try:
+    from colorama import init, Fore, Style
+    init(autoreset=True)
+    COLORAMA_AVAILABLE = True
+except ImportError:
+    COLORAMA_AVAILABLE = False
+    # Create dummy color classes if colorama not available
+    class Fore:
+        GREEN = YELLOW = BLUE = CYAN = RED = MAGENTA = RESET = ""
+    class Style:
+        BRIGHT = RESET_ALL = ""
 
 
 class EdisonPlatformClient:
@@ -23,13 +43,15 @@ class EdisonPlatformClient:
         client (EdisonClient): The underlying Edison client instance
     """
     
-    def __init__(self, api_key: Optional[str] = None):
+    def __init__(self, api_key: Optional[str] = None, verbose: bool = True, show_progress: bool = True):
         """
         Initialize the Edison Platform Client.
         
         Args:
             api_key (str, optional): Edison API key. If not provided,
                 will attempt to read from EDISON_API_KEY environment variable.
+            verbose (bool): Enable verbose terminal output (default: True)
+            show_progress (bool): Show progress indicators during task execution (default: True)
         
         Raises:
             ValueError: If no API key is provided or found in environment.
@@ -44,6 +66,36 @@ class EdisonPlatformClient:
         
         self.client = EdisonClient(api_key=self.api_key)
         self.logger = logging.getLogger(__name__)
+        self.verbose = verbose
+        self.show_progress = show_progress
+        
+        # Configure logging to show INFO level if verbose
+        if self.verbose:
+            logging.basicConfig(
+                level=logging.INFO,
+                format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
+                datefmt='%H:%M:%S'
+            )
+    
+    def _log_status(self, message: str, status: str = "info"):
+        """Log a status message with optional color formatting."""
+        if not self.verbose:
+            return
+            
+        color_map = {
+            "info": Fore.CYAN if COLORAMA_AVAILABLE else "",
+            "success": Fore.GREEN if COLORAMA_AVAILABLE else "",
+            "warning": Fore.YELLOW if COLORAMA_AVAILABLE else "",
+            "error": Fore.RED if COLORAMA_AVAILABLE else "",
+            "progress": Fore.BLUE if COLORAMA_AVAILABLE else "",
+        }
+        
+        color = color_map.get(status, "")
+        reset = Style.RESET_ALL if COLORAMA_AVAILABLE else ""
+        
+        timestamp = time.strftime("%H:%M:%S")
+        print(f"{color}[{timestamp}] {message}{reset}", file=sys.stderr)
+        sys.stderr.flush()
     
     def run_task(self, task_data: Dict[str, Any]) -> Any:
         """
@@ -65,12 +117,41 @@ class EdisonPlatformClient:
             ... }
             >>> response = client.run_task(task)
         """
-        self.logger.info(f"Running task: {task_data.get('name', 'Unknown')}")
+        job_name = task_data.get('name', 'Unknown')
+        query = task_data.get('query', 'N/A')
+        
+        self._log_status(f"Starting {job_name} task...", "info")
+        if query != 'N/A':
+            self._log_status(f"Query: {query[:100]}{'...' if len(query) > 100 else ''}", "info")
+        
+        self.logger.info(f"Running task: {job_name}")
+        
         try:
-            response = self.client.run_tasks_until_done(task_data)
+            # Create a progress indicator
+            if self.show_progress and TQDM_AVAILABLE:
+                with tqdm(
+                    desc=f"Processing {job_name}",
+                    unit="step",
+                    bar_format="{l_bar}{bar}| {n_fmt}/{total_fmt} [{elapsed}<{remaining}]",
+                    file=sys.stderr
+                ) as pbar:
+                    # Note: This is a placeholder - actual progress would need
+                    # to be tracked from the underlying client if it supports callbacks
+                    self._log_status("Task submitted, waiting for completion...", "progress")
+                    
+                    response = self.client.run_tasks_until_done(task_data)
+                    
+                    pbar.update(100)
+                    pbar.set_description(f"{job_name} completed")
+            else:
+                self._log_status("Task submitted, waiting for completion...", "progress")
+                response = self.client.run_tasks_until_done(task_data)
+            
+            self._log_status(f"{job_name} task completed successfully!", "success")
             self.logger.info("Task completed successfully")
             return response
         except Exception as e:
+            self._log_status(f"Error running task: {str(e)}", "error")
             self.logger.error(f"Error running task: {str(e)}")
             raise
     
@@ -221,6 +302,13 @@ class EdisonPlatformClient:
             ...     "Which neglected diseases had a treatment developed by AI?"
             ... )
         """
+        if self.verbose:
+            self._log_status("=" * 60, "info")
+            self._log_status("LITERATURE SEARCH", "info")
+            self._log_status("=" * 60, "info")
+            self._log_status(f"Researching: {query}", "info")
+            self._log_status("This may take several minutes as Kosmos reads papers and analyzes data...", "progress")
+        
         task_data = {
             "name": JobNames.LITERATURE,
             "query": query
@@ -243,6 +331,12 @@ class EdisonPlatformClient:
             ...     "Has anyone used CRISPR to cure sickle cell anemia?"
             ... )
         """
+        if self.verbose:
+            self._log_status("=" * 60, "info")
+            self._log_status("PRECEDENT SEARCH", "info")
+            self._log_status("=" * 60, "info")
+            self._log_status(f"Searching for: {query}", "info")
+        
         task_data = {
             "name": JobNames.PRECEDENT,
             "query": query
@@ -264,6 +358,14 @@ class EdisonPlatformClient:
             >>> client = EdisonPlatformClient(api_key="your_key")
             >>> result = client.analyze_data("my_dataset", analysis_type="differential")
         """
+        if self.verbose:
+            self._log_status("=" * 60, "info")
+            self._log_status("DATA ANALYSIS", "info")
+            self._log_status("=" * 60, "info")
+            self._log_status(f"Analyzing dataset: {dataset}", "info")
+            if kwargs:
+                self._log_status(f"Parameters: {kwargs}", "info")
+        
         task_data = {
             "name": JobNames.ANALYSIS,
             "dataset": dataset,
@@ -286,6 +388,12 @@ class EdisonPlatformClient:
             >>> client = EdisonPlatformClient(api_key="your_key")
             >>> result = client.chemistry_task("Design a drug for target protein X")
         """
+        if self.verbose:
+            self._log_status("=" * 60, "info")
+            self._log_status("CHEMISTRY TASK", "info")
+            self._log_status("=" * 60, "info")
+            self._log_status(f"Task: {query}", "info")
+        
         task_data = {
             "name": JobNames.MOLECULES,
             "query": query,
