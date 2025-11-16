@@ -1,7 +1,12 @@
 """
 Test script to run the basic usage query from README
 """
+import os
+from dotenv import load_dotenv
 from edison_platform import EdisonPlatformClient
+
+# Load environment variables from .env file
+load_dotenv()
 
 # Initialize the client (reads API key from environment)
 client = EdisonPlatformClient()
